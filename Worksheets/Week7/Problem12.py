@@ -17,11 +17,12 @@ class Edge:
 
 class Graph:
     edges: list[Edge]
-    verticies: list[list[int]]
+    verticies: list[Node]
 
 def BFS(source, target, graph):
     p_queue = heapq.heapify([])
     heapq.heappush((0,source))
+    visited = set()
 
     ## Distance, BT, edges 
     data = {}
@@ -31,6 +32,7 @@ def BFS(source, target, graph):
     ## Take out closest node to source
     while p_queue:
         cur_node = heapq.heappop(p_queue)
+        visited.add(cur_node)
         cn_distance, cn_bt, cn_edges = data[cur_node.name]
         for neighbor in cur_node:
             n_distance, n_bt, n_edges= data[neighbor.name]
@@ -39,6 +41,7 @@ def BFS(source, target, graph):
                 n_distance = new_distance
                 n_bt = cur_node
                 n_edges = cn_edges + 1
-    
+            if neighbor not in visited:
+                visited.add(neighbor)
     return data[target.name][0]
 
